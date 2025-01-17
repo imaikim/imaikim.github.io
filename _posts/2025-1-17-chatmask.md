@@ -30,12 +30,15 @@ author_profile: false
             justify-content: center;
             align-items: center;
             height: 100vh;
+            flex-direction: column;
         }
 
         #container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 500px;
         }
 
         #webcam-container {
@@ -50,6 +53,10 @@ author_profile: false
 
         #label-container {
             margin: 10px;
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 350px;
+            text-align: center;
         }
 
         #button-container {
@@ -96,7 +103,7 @@ author_profile: false
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
 <script>
-    const URL = "https://imaikim.github.io/my_model/";  // 여기에 실제 모델 URL을 입력하세요
+    const URL = "https://your-github-path/my_model/";  // 여기에 실제 모델 URL을 입력하세요
     let model, webcam, labelContainer, maxPredictions;
     let videoElement;  // videoElement 변수로 video 요소를 관리합니다.
 
@@ -204,6 +211,7 @@ author_profile: false
 </script>
 </body>
 </html>
+
 
 
 
