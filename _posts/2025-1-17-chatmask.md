@@ -21,7 +21,7 @@ author_profile: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mask Detection</title>
     <style>
-        body {
+        /*body {
             margin: 0;
             padding: 0;
             font-family: Arial, sans-serif;
@@ -33,15 +33,7 @@ author_profile: false
             justify-content: flex-start;
             height: 100vh;
             overflow: hidden;
-        }
-
-        #header {
-            width: 100%;
-            text-align: center;
-            padding: 10px 0;
-            background-color: #20232a;
-            font-size: 20px;
-        }
+        }*/
 
         #label-container {
             margin-top: 20px;
