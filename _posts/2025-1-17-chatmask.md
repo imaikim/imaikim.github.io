@@ -15,6 +15,7 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -38,6 +39,7 @@ author_profile: false
         #label-container {
             margin: 10px;
             color: white;
+            font-size: 20px;
             text-align: center;
         }
 
@@ -122,9 +124,7 @@ author_profile: false
 
         // 레이블을 표시할 컨테이너 설정
         labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) {
-            labelContainer.appendChild(document.createElement("div"));
-        }
+        labelContainer.innerHTML = "마스크 인식 중...";  // 초기 텍스트
 
         // 예측을 시작하는 루프
         window.requestAnimationFrame(loop);
@@ -151,15 +151,10 @@ author_profile: false
                 topProb = prob;
                 topClassName = prediction[i].className + ": " + prob.toFixed(2) + "%";
             }
-
-            // 레이블 업데이트
-            labelContainer.childNodes[i].innerHTML = "";
         }
 
-        // 가장 높은 확률을 가진 클래스 표시
-        const topChild = labelContainer.childNodes[0]; // 예시로 첫 번째 자식만 사용
-        topChild.innerHTML = topClassName;
-        topChild.style.color = "white";
+        // 가장 높은 확률을 가진 클래스를 레이블로 표시
+        labelContainer.innerHTML = topClassName;
     }
 
     // 시작 버튼 클릭 시 웹캠 시작
@@ -180,6 +175,7 @@ author_profile: false
 </script>
 </body>
 </html>
+
 
 
 
