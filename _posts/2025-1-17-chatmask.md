@@ -15,6 +15,7 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,13 +24,13 @@ author_profile: false
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #282c34;
-            color: white;
+            margin: 0;
+            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
+            background-color: #282c34;
         }
 
         #container {
@@ -37,23 +38,23 @@ author_profile: false
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
         }
 
-        #webcam-container, #label-container {
-            margin: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 350px;
+        #webcam-container {
+            width: 100%;
             height: 350px;
             border: 2px solid #fff;
+            margin: 20px 0;
+            position: relative;
         }
 
         #button-container {
             display: flex;
             justify-content: space-between;
             width: 100%;
-            max-width: 400px;
         }
 
         #startBtn, #stopBtn {
@@ -64,6 +65,7 @@ author_profile: false
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin: 10px;
         }
 
         #stopBtn {
@@ -71,23 +73,21 @@ author_profile: false
         }
 
         #label-container {
-            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.6);
             padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            width: 350px;
-            text-align: center;
             color: white;
             font-size: 18px;
-        }
-
-        #stopBtn {
-            display: none;
+            width: 100%;
         }
 
         video {
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+
+        #stopBtn {
+            display: none;
         }
     </style>
 </head>
@@ -211,6 +211,8 @@ author_profile: false
 
 </body>
 </html>
+
+
 
 
 
