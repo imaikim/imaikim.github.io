@@ -19,7 +19,7 @@ author_profile: false
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mask Detection</title>
+    <title>Teachable Machine Image</title>
     <style>
         #container {
             display: flex;
@@ -39,111 +39,111 @@ author_profile: false
 
         #startBtn, #stopBtn {
             padding: 10px;
-            margin: 5px;
         }
     </style>
 </head>
 <body>
 <div id="container">
-    <h1>마스크 착용 확인</h1>
     <div id="button-container">
-        <button type="button" id="startBtn" onclick="init()">시작</button>
-        <button type="button" id="stopBtn" onclick="stop()" style="display: none;">중지</button>
+        <button type="button" id='startBtn' onclick="init()">시작</button>
+        <button type="button" id='stopBtn' onclick="stop()">중지</button>
     </div>
     <div id="webcam-container"></div>
     <div id="label-container"></div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
-<script>
-    const URL = "./my_model/"; // 모델 폴더 경로
+<!-- TensorFlow.js and Teachable Machine -->
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+
+<script type="text/javascript">
+    const URL = "https://imaikim.github.io/my_model/"; // GitHub 또는 다른 경로에서 모델 URL 설정
 
     let model, webcam, labelContainer, maxPredictions;
-    let isRunning = false;
 
+    var flag = false;
+
+    // 웹캠 및 모델 초기화
     async function init() {
-    try {
-        if (isRunning) {
-            console.log("이미 실행 중입니다.");
+        var element = document.getElementById('webcam-container');
+        if (element.hasChildNodes()) {
             return;
         }
 
-        isRunning = true;
-        document.getElementById('startBtn').style.display = 'none';
-        document.getElementById('stopBtn').style.display = 'inline';
+        flag = true;
+        const modelURL = URL + "model.json";
+        const metadataURL = URL + "metadata.json";
 
-        console.log("모델 및 메타데이터 로드 중...");
-        const modelURL = `${URL}model.json`;
-        const metadataURL = `${URL}metadata.json`;
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
-        console.log("모델 로드 완료!");
-
-        console.log("웹캠 설정 중...");
-        webcam = new tmImage.Webcam(350, 350, true); // width, height, flip
-
-        // 웹캠 설정을 try-catch로 감싸서 오류를 콘솔에 출력
+        // 모델 및 메타데이터 로드
         try {
-            await webcam.setup(); // 웹캠 권한 요청
-            console.log("웹캠 권한 허용됨");
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
         } catch (error) {
-            console.error("웹캠 설정 오류:", error);
-            alert("웹캠 권한을 허용할 수 없습니다. 브라우저에서 권한을 확인하세요.");
-            stop();
+            console.error("모델 로드 실패:", error);
             return;
         }
 
+        const flip = true; 
+        webcam = new tmImage.Webcam(350, 350, flip); 
+        await webcam.setup(); 
         await webcam.play();
-        console.log("웹캠 실행 중");
+        window.requestAnimationFrame(loop);
 
         document.getElementById("webcam-container").appendChild(webcam.canvas);
 
         labelContainer = document.getElementById("label-container");
-        labelContainer.innerHTML = '';
-        for (let i = 0; i < maxPredictions; i++) {
-            const labelElement = document.createElement("div");
-            labelContainer.appendChild(labelElement);
+        for (let i = 0; i < maxPredictions; i++) { 
+            labelContainer.appendChild(document.createElement("div"));
         }
 
-        console.log("애플리케이션 실행 중...");
-        window.requestAnimationFrame(loop);
-    } catch (error) {
-        console.error("초기화 오류:", error);
-        alert("웹캠 초기화에 실패했습니다. 브라우저 콘솔을 확인하세요.");
-        stop();
+        document.getElementById("startBtn").style.visibility = "hidden";
+        document.getElementById("stopBtn").style.visibility = "visible";
     }
-}
-
 
     async function loop() {
-        if (!isRunning) return;
-        webcam.update();
+        webcam.update(); 
         await predict();
-        window.requestAnimationFrame(loop);
+        if (flag) {
+            window.requestAnimationFrame(loop);
+        }
     }
 
     async function predict() {
-        const predictions = await model.predict(webcam.canvas);
+        const prediction = await model.predict(webcam.canvas);
+        var topChild;
+        var topProb = 0;
+        var topClassName = "";
         for (let i = 0; i < maxPredictions; i++) {
-            const label = predictions[i].className;
-            const probability = predictions[i].probability.toFixed(2) * 100;
-            labelContainer.childNodes[i].innerHTML = `${label}: ${probability}%`;
+            prob = prediction[i].probability * 100;
+            if (prob > topProb) {
+                topChild = labelContainer.childNodes[i];
+                topProb = prob;
+                topClassName = prediction[i].className + ": " + prob.toFixed(2) + "%";
+            }
+            labelContainer.childNodes[i].innerHTML = "";
         }
+        topChild.innerHTML = topClassName;
+        topChild.style.color = "white";
     }
 
-    function stop() {
-        isRunning = false;
-        if (webcam && webcam.canvas) {
-            webcam.stop();
-            document.getElementById("webcam-container").innerHTML = '';
+    async function stop() {
+        flag = false;
+        webcam.stop();
+        document.getElementById("webcam-container").removeChild(webcam.canvas);
+        const labels = document.getElementById("label-container");
+        while (labels.firstChild) {
+            labels.removeChild(labels.lastChild);
         }
-        document.getElementById('startBtn').style.display = 'inline';
-        document.getElementById('stopBtn').style.display = 'none';
-        console.log("애플리케이션 중지");
+        document.getElementById("startBtn").style.visibility = "visible";
+        document.getElementById("stopBtn").style.visibility = "hidden";
+    }
+
+    window.onload = function () {
+        document.getElementById("stopBtn").style.visibility = "hidden";
     }
 </script>
 </body>
 </html>
+
 
 
