@@ -21,32 +21,82 @@ author_profile: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teachable Machine Image</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
         #container {
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
         }
 
         #webcam-container, #label-container {
             margin: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 350px;
+            height: 350px;
+            border: 2px solid #fff;
         }
 
         #button-container {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             width: 100%;
+            max-width: 400px;
         }
 
         #startBtn, #stopBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #stopBtn {
+            background-color: #f44336;
+        }
+
+        #label-container {
+            margin-top: 20px;
             padding: 10px;
+            background-color: rgba(0, 0, 0, 0.5);
+            width: 350px;
+            text-align: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        #stopBtn {
+            display: none;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
 <body>
+
 <div id="container">
     <div id="button-container">
-        <button type="button" id='startBtn'>시작</button>
-        <button type="button" id='stopBtn'>중지</button>
+        <button type="button" id="startBtn">시작</button>
+        <button type="button" id="stopBtn">중지</button>
     </div>
     <div id="webcam-container"></div>
     <div id="label-container"></div>
@@ -104,6 +154,10 @@ author_profile: false
 
         // 예측을 시작하는 루프
         window.requestAnimationFrame(loop);
+
+        // 버튼 상태 변경
+        document.getElementById('startBtn').style.display = "none";
+        document.getElementById('stopBtn').style.display = "inline-block";
     }
 
     // 웹캠으로부터 이미지를 업데이트하고 예측을 진행하는 함수
@@ -146,16 +200,18 @@ author_profile: false
         webcam.stop();
         document.getElementById('webcam-container').innerHTML = '';
         labelContainer.innerHTML = '';
-        document.getElementById('startBtn').style.visibility = "visible";
-        document.getElementById('stopBtn').style.visibility = "hidden";
+        document.getElementById('startBtn').style.display = "inline-block";
+        document.getElementById('stopBtn').style.display = "none";
     });
 
     window.onload = function () {
-        document.getElementById('stopBtn').style.visibility = "hidden";
+        document.getElementById('stopBtn').style.display = "none";
     }
 </script>
+
 </body>
 </html>
+
 
 
 
