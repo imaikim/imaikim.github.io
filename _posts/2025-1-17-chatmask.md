@@ -15,6 +15,7 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -26,10 +27,11 @@ author_profile: false
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            width: 100%;
+            height: 100vh;
         }
 
         #webcam-container {
-            position: relative;
             margin: 10px;
             width: 350px;
             height: 350px;
@@ -41,6 +43,7 @@ author_profile: false
             color: white;
             font-size: 20px;
             text-align: center;
+            visibility: hidden; /* 초기 상태에서 숨기기 */
         }
 
         #button-container {
@@ -61,11 +64,6 @@ author_profile: false
 
         button:disabled {
             background-color: #ccc;
-        }
-
-        /* 오렌지색 박스 제거 */
-        .hidden {
-            display: none;
         }
     </style>
 </head>
@@ -173,11 +171,11 @@ author_profile: false
 
     window.onload = function () {
         document.getElementById('stopBtn').disabled = true;
-        document.getElementById('label-container').style.visibility = 'hidden'; // 초기 상태에서 텍스트 박스를 숨김
     }
 </script>
 </body>
 </html>
+
 
 
 
