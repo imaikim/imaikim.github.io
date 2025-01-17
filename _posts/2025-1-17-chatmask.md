@@ -23,13 +23,13 @@ author_profile: false
     <style>
         body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #282c34;
+            color: white;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            background-color: #282c34;
-            color: white;
         }
 
         #container {
@@ -38,25 +38,34 @@ author_profile: false
             align-items: center;
         }
 
-        #webcam-container, #label-container {
+        #webcam-container {
+            margin: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 350px;
+            height: 350px;
+            border: 2px solid #fff;
+        }
+
+        #label-container {
             margin: 10px;
         }
 
         #button-container {
             display: flex;
-            justify-content: space-around;
-            width: 100%;
+            justify-content: center;
             margin-top: 20px;
         }
 
         #startBtn, #stopBtn {
-            padding: 10px;
+            padding: 10px 20px;
             background-color: #4CAF50;
             color: white;
             border: none;
             cursor: pointer;
             border-radius: 5px;
-            margin: 5px;
+            margin: 10px;
         }
 
         #stopBtn {
@@ -64,8 +73,7 @@ author_profile: false
         }
 
         video {
-            width: 100%; /* Adjust the video size */
-            max-width: 500px;
+            width: 100%;
             height: auto;
         }
 
@@ -196,6 +204,7 @@ author_profile: false
 </script>
 </body>
 </html>
+
 
 
 
