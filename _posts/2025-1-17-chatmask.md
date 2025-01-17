@@ -130,6 +130,8 @@ author_profile: false
 
     // 모델을 로드하고 예측을 시작하는 함수
     async function loadModelAndStart(videoElement) {
+        console.log("모델 로딩 시작...");
+
         // 모델 로드
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
@@ -210,6 +212,7 @@ author_profile: false
 
 </body>
 </html>
+
 
 
 
