@@ -15,6 +15,7 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,41 +28,15 @@ author_profile: false
             background-color: #282c34;
             color: white;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
 
         #container {
-            width: 100%;
-            max-width: 600px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-        }
-
-        #button-container {
-            margin: 20px;
-            display: flex;
-            justify-content: center;
-            width: 100%;
-        }
-
-        #startBtn, #stopBtn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            font-size: 16px;
-            margin: 0 10px;
-        }
-
-        #stopBtn {
-            background-color: #f44336;
         }
 
         #webcam-container {
@@ -75,34 +50,46 @@ author_profile: false
         }
 
         #label-container {
+            margin: 10px;
+        }
+
+        #button-container {
+            display: flex;
+            justify-content: center;
             margin-top: 20px;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            width: 350px;
-            text-align: center;
+        }
+
+        #startBtn, #stopBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
             color: white;
-            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+        }
+
+        #stopBtn {
+            background-color: #f44336;
         }
 
         video {
             width: 100%;
             height: auto;
         }
+
+        #label-container div {
+            margin: 5px;
+        }
     </style>
 </head>
 <body>
-
 <div id="container">
-    <!-- 버튼 영역 -->
     <div id="button-container">
         <button type="button" id="startBtn">시작</button>
         <button type="button" id="stopBtn" style="display: none;">중지</button>
     </div>
-
-    <!-- 웹캠 화면 -->
     <div id="webcam-container"></div>
-
-    <!-- 예측 결과 -->
     <div id="label-container"></div>
 </div>
 
@@ -112,12 +99,13 @@ author_profile: false
 <script>
     const URL = "https://imaikim.github.io/my_model/";  // 여기에 실제 모델 URL을 입력하세요
     let model, webcam, labelContainer, maxPredictions;
-    let videoElement;
+    let videoElement;  // videoElement 변수로 video 요소를 관리합니다.
 
     // 웹캠을 시작하는 함수
     function startWebcam() {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
+                // 기존 video 요소를 제거하고 새로운 video 요소 생성
                 if (videoElement) {
                     videoElement.srcObject = null;  // 이전 스트림 정리
                 }
@@ -125,7 +113,7 @@ author_profile: false
                 videoElement.srcObject = stream;
                 videoElement.play();
 
-                // 웹캠 영상을 화면에 표시
+                // 웹캠 영상 화면에 표시
                 document.getElementById('webcam-container').appendChild(videoElement);
 
                 // 모델 로드 및 예측 시작
@@ -162,8 +150,7 @@ author_profile: false
 
         // 예측을 시작하는 루프
         window.requestAnimationFrame(loop);
-
-        // 버튼 상태 변경
+        // 중지 버튼을 보이게 설정
         document.getElementById('startBtn').style.display = "none";
         document.getElementById('stopBtn').style.display = "inline-block";
     }
@@ -216,7 +203,6 @@ author_profile: false
         document.getElementById('stopBtn').style.display = "none";
     }
 </script>
-
 </body>
 </html>
 
