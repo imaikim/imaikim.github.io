@@ -21,19 +21,11 @@ author_profile: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mask Detection</title>
     <style>
-        /*body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-            background-color: #282c34;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
-            overflow: hidden;
-        }*/
+        #container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        }
 
         #label-container {
             margin-top: 20px;
@@ -76,7 +68,7 @@ author_profile: false
     </style>
 </head>
 <body>
-    
+<div id="container">
     <div id="label-container">마스크 착용 여부를 확인 중...</div>
     <div id="video-container">
         <video id="webcam" autoplay></video>
@@ -85,6 +77,7 @@ author_profile: false
         <button id="startBtn">시작</button>
         <button id="stopBtn" disabled>정지</button>
     </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
