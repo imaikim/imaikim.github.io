@@ -50,7 +50,7 @@ author_profile: false
         }
 
         #video-container {
-            margin-top: 30px;
+            margin-top: 300px;
             width: 350px;
             height: 350px;
             background-color: black;
