@@ -30,25 +30,36 @@ author_profile: false
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
+            overflow: hidden;
+        }
+
+        #header {
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            background-color: #20232a;
+            font-size: 20px;
         }
 
         #label-container {
-            position: absolute;
-            top: 20px;
+            margin-top: 20px;
             font-size: 24px;
-            text-align: center;
-            width: 100%;
-            z-index: 1;
+            font-weight: bold;
         }
 
         #video-container {
-            position: relative;
+            margin-top: 30px;
             width: 350px;
             height: 350px;
             background-color: black;
             display: none; /* 초기 상태에서 숨김 */
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
         }
 
         #button-container {
@@ -73,6 +84,7 @@ author_profile: false
     </style>
 </head>
 <body>
+    <div id="header">마스크 착용 감지 시스템</div>
     <div id="label-container">마스크 착용 여부를 확인 중...</div>
     <div id="video-container">
         <video id="webcam" autoplay></video>
@@ -152,7 +164,6 @@ author_profile: false
             videoElement.style.display = 'none';
 
             document.getElementById('video-container').style.display = 'none';
-            document.getElementById('label-container').style.display = 'none';
             document.getElementById('label-container').innerHTML = "마스크 착용 여부를 확인 중...";
             document.getElementById('startBtn').disabled = false;
             document.getElementById('stopBtn').disabled = true;
@@ -168,6 +179,7 @@ author_profile: false
     </script>
 </body>
 </html>
+
 
 
 
