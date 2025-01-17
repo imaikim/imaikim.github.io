@@ -21,72 +21,32 @@ author_profile: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teachable Machine Image</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            background-color: #282c34;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
         #container {
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        #webcam-container {
-            margin: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 350px;
-            height: 350px;
-            border: 2px solid #fff;
-        }
-
-        #label-container {
+        #webcam-container, #label-container {
             margin: 10px;
         }
 
         #button-container {
             display: flex;
-            justify-content: center;
-            margin-top: 20px;
+            justify-content: space-around;
+            width: 100%;
         }
 
         #startBtn, #stopBtn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 10px;
-        }
-
-        #stopBtn {
-            background-color: #f44336;
-        }
-
-        video {
-            width: 100%;
-            height: auto;
-        }
-
-        #label-container div {
-            margin: 5px;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
 <div id="container">
     <div id="button-container">
-        <button type="button" id="startBtn">시작</button>
-        <button type="button" id="stopBtn" style="display: none;">중지</button>
+        <button type="button" id='startBtn'>시작</button>
+        <button type="button" id='stopBtn'>중지</button>
     </div>
     <div id="webcam-container"></div>
     <div id="label-container"></div>
@@ -98,24 +58,19 @@ author_profile: false
 <script>
     const URL = "https://imaikim.github.io/my_model/";  // 여기에 실제 모델 URL을 입력하세요
     let model, webcam, labelContainer, maxPredictions;
-    let videoElement;  // videoElement 변수로 video 요소를 관리합니다.
 
     // 웹캠을 시작하는 함수
     function startWebcam() {
         navigator.mediaDevices.getUserMedia({ video: true })
             .then(function(stream) {
-                // 기존 video 요소를 제거하고 새로운 video 요소 생성
-                if (videoElement) {
-                    videoElement.srcObject = null;  // 이전 스트림 정리
-                }
-                videoElement = document.createElement('video');
+                const videoElement = document.createElement('video');
                 videoElement.srcObject = stream;
                 videoElement.play();
 
                 // 웹캠 영상 화면에 표시
                 document.getElementById('webcam-container').appendChild(videoElement);
 
-                // 모델 로드 및 예측 시작
+                // 모델 로드 및 웹캠 처리
                 loadModelAndStart(videoElement);
             })
             .catch(function(error) {
@@ -149,9 +104,6 @@ author_profile: false
 
         // 예측을 시작하는 루프
         window.requestAnimationFrame(loop);
-        // 중지 버튼을 보이게 설정
-        document.getElementById('startBtn').style.display = "none";
-        document.getElementById('stopBtn').style.display = "inline-block";
     }
 
     // 웹캠으로부터 이미지를 업데이트하고 예측을 진행하는 함수
@@ -194,16 +146,17 @@ author_profile: false
         webcam.stop();
         document.getElementById('webcam-container').innerHTML = '';
         labelContainer.innerHTML = '';
-        document.getElementById('startBtn').style.display = "inline-block";
-        document.getElementById('stopBtn').style.display = "none";
+        document.getElementById('startBtn').style.visibility = "visible";
+        document.getElementById('stopBtn').style.visibility = "hidden";
     });
 
     window.onload = function () {
-        document.getElementById('stopBtn').style.display = "none";
+        document.getElementById('stopBtn').style.visibility = "hidden";
     }
 </script>
 </body>
 </html>
+
 
 
 
