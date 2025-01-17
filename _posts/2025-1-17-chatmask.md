@@ -62,6 +62,11 @@ author_profile: false
         button:disabled {
             background-color: #ccc;
         }
+
+        /* 오렌지색 박스 제거 */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -173,6 +178,7 @@ author_profile: false
 </script>
 </body>
 </html>
+
 
 
 
