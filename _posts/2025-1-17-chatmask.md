@@ -57,7 +57,7 @@ author_profile: false
 
     <script type="text/javascript">
         // 모델 경로 설정 (GitHub Pages 경로 확인)
-        const URL = "https://github.com/imaikim/imaikim.github.io/tree/master/my_model/"; // 변경 필요
+        const URL = "https://imaikim.github.io/my_model/"; // 변경 필요
 
         let model, webcam, labelContainer, maxPredictions;
         let isRunning = false; // 루프 상태 확인용 플래그
