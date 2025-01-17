@@ -114,7 +114,7 @@ author_profile: false
                 document.getElementById('startBtn').disabled = true;
                 document.getElementById('stopBtn').disabled = false;
                 document.getElementById('orange-box').style.visibility = 'hidden'; // 오렌지색 박스 숨김
-                document.getElementById('label-container').style.visibility = 'hidden'; // 텍스트 박스 숨김
+                document.getElementById('label-container').style.visibility = 'visible'; // 텍스트 박스 보이기
             })
             .catch(function(error) {
                 console.error('웹캠을 열 수 없습니다.', error);
@@ -178,8 +178,8 @@ author_profile: false
         webcam.stop();
         document.getElementById('webcam-container').innerHTML = '';
         document.getElementById('orange-box').style.visibility = 'visible'; // 오렌지색 박스 보이기
-        document.getElementById('label-container').style.visibility = 'visible'; // 텍스트 박스 보이기
-        document.getElementById('label-container').innerHTML = '마스크 인식이 중지되었습니다.';
+        document.getElementById('label-container').style.visibility = 'hidden'; // 텍스트 박스 숨기기
+        document.getElementById('label-container').innerHTML = '마스크 인식이 중지되었습니다.'; // 텍스트
         document.getElementById('startBtn').disabled = false;
         document.getElementById('stopBtn').disabled = true;
     });
@@ -191,6 +191,8 @@ author_profile: false
 </script>
 </body>
 </html>
+
+
 
 
 
