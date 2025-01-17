@@ -35,7 +35,7 @@ author_profile: false
 
         #video-container {
             /*margin-top: 100px;*/
-            width: 350px;
+            width: 400px;
             height: auto;
             background-color: black;
             display: none; /* 초기 상태에서 숨김 */
