@@ -88,7 +88,7 @@ author_profile: false
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
 <script>
-    const URL = "https://your-github-path/my_model/";  // 여기에 실제 모델 URL을 입력하세요
+    const URL = "https://imaikim.github.io/my_model/";  // 여기에 실제 모델 URL을 입력하세요
     let model, webcam, labelContainer, maxPredictions;
     let videoElement;  // videoElement 변수로 video 요소를 관리합니다.
 
