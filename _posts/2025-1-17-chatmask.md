@@ -110,20 +110,30 @@ author_profile: false
 
     async function predict() {
         const prediction = await model.predict(webcam.canvas);
-        var topChild;
-        var topProb = 0;
-        var topClassName = "";
-        for (let i = 0; i < maxPredictions; i++) {
-            prob = prediction[i].probability * 100;
-            if (prob > topProb) {
-                topChild = labelContainer.childNodes[i];
-                topProb = prob;
-                topClassName = prediction[i].className + ": " + prob.toFixed(2) + "%";
+        
+        if (labelContainer) {
+            var topChild;
+            var topProb = 0;
+            var topClassName = "";
+
+            for (let i = 0; i < maxPredictions; i++) {
+                prob = prediction[i].probability * 100;
+                if (prob > topProb) {
+                    topChild = labelContainer.childNodes[i];
+                    topProb = prob;
+                    topClassName = prediction[i].className + ": " + prob.toFixed(2) + "%";
+                }
+                // 자식 노드가 정의되지 않은 경우를 방지
+                if (labelContainer.childNodes[i]) {
+                    labelContainer.childNodes[i].innerHTML = "";
+                }
             }
-            labelContainer.childNodes[i].innerHTML = "";
+            
+            if (topChild) {
+                topChild.innerHTML = topClassName;
+                topChild.style.color = "white";
+            }
         }
-        topChild.innerHTML = topClassName;
-        topChild.style.color = "white";
     }
 
     async function stop() {
@@ -144,6 +154,7 @@ author_profile: false
 </script>
 </body>
 </html>
+
 
 
 
