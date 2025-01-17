@@ -13,7 +13,7 @@ author_profile: false
 
 # 시작버튼을 클릭하세요
 
-<!-- <!DOCTYPE html> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
