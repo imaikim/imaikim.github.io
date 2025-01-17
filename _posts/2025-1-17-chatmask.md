@@ -45,115 +45,118 @@ author_profile: false
 <body>
 <div id="container">
     <div id="button-container">
-        <button type="button" id='startBtn' onclick="init()">시작</button>
-        <button type="button" id='stopBtn' onclick="stop()">중지</button>
+        <button type="button" id='startBtn'>시작</button>
+        <button type="button" id='stopBtn'>중지</button>
     </div>
     <div id="webcam-container"></div>
     <div id="label-container"></div>
 </div>
 
-<!-- TensorFlow.js and Teachable Machine -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-<script type="text/javascript">
-    const URL = "https://imaikim.github.io/my_model/"; // GitHub 또는 다른 경로에서 모델 URL 설정
-
+<script>
+    const URL = "https://imaikim.github.io/my_model/";  // 여기에 실제 모델 URL을 입력하세요
     let model, webcam, labelContainer, maxPredictions;
 
-    var flag = false;
+    // 웹캠을 시작하는 함수
+    function startWebcam() {
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then(function(stream) {
+                const videoElement = document.createElement('video');
+                videoElement.srcObject = stream;
+                videoElement.play();
 
-    // 웹캠 및 모델 초기화
-    async function init() {
-        var element = document.getElementById('webcam-container');
-        if (element.hasChildNodes()) {
-            return;
-        }
+                // 웹캠 영상 화면에 표시
+                document.getElementById('webcam-container').appendChild(videoElement);
 
-        flag = true;
+                // 모델 로드 및 웹캠 처리
+                loadModelAndStart(videoElement);
+            })
+            .catch(function(error) {
+                console.error('웹캠을 열 수 없습니다.', error);
+                alert('웹캠에 접근할 수 없습니다. 브라우저에서 권한을 확인해주세요.');
+            });
+    }
+
+    // 모델을 로드하고 예측을 시작하는 함수
+    async function loadModelAndStart(videoElement) {
+        // 모델 로드
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
 
-        // 모델 및 메타데이터 로드
-        try {
-            model = await tmImage.load(modelURL, metadataURL);
-            maxPredictions = model.getTotalClasses();
-        } catch (error) {
-            console.error("모델 로드 실패:", error);
-            return;
-        }
-
-        const flip = true; 
-        webcam = new tmImage.Webcam(350, 350, flip); 
-        await webcam.setup(); 
+        // 웹캠 스트림 설정
+        const flip = true;
+        webcam = new tmImage.Webcam(350, 350, flip); // width, height, flip
+        await webcam.setup();
         await webcam.play();
-        window.requestAnimationFrame(loop);
 
+        // 캔버스를 웹페이지에 표시
         document.getElementById("webcam-container").appendChild(webcam.canvas);
 
+        // 레이블을 표시할 컨테이너 설정
         labelContainer = document.getElementById("label-container");
-        for (let i = 0; i < maxPredictions; i++) { 
+        for (let i = 0; i < maxPredictions; i++) {
             labelContainer.appendChild(document.createElement("div"));
         }
 
-        document.getElementById("startBtn").style.visibility = "hidden";
-        document.getElementById("stopBtn").style.visibility = "visible";
+        // 예측을 시작하는 루프
+        window.requestAnimationFrame(loop);
     }
 
+    // 웹캠으로부터 이미지를 업데이트하고 예측을 진행하는 함수
     async function loop() {
-        webcam.update(); 
-        await predict();
-        if (flag) {
-            window.requestAnimationFrame(loop);
-        }
+        webcam.update(); // 웹캠의 최신 이미지를 가져옴
+        await predict(); // 예측 진행
+        window.requestAnimationFrame(loop);
     }
 
+    // 모델을 사용하여 예측을 수행하는 함수
     async function predict() {
         const prediction = await model.predict(webcam.canvas);
-        
-        if (labelContainer) {
-            var topChild;
-            var topProb = 0;
-            var topClassName = "";
 
-            for (let i = 0; i < maxPredictions; i++) {
-                prob = prediction[i].probability * 100;
-                if (prob > topProb) {
-                    topChild = labelContainer.childNodes[i];
-                    topProb = prob;
-                    topClassName = prediction[i].className + ": " + prob.toFixed(2) + "%";
-                }
-                // 자식 노드가 정의되지 않은 경우를 방지
-                if (labelContainer.childNodes[i]) {
-                    labelContainer.childNodes[i].innerHTML = "";
-                }
+        let topProb = 0;
+        let topClassName = "";
+
+        for (let i = 0; i < maxPredictions; i++) {
+            const prob = prediction[i].probability * 100;
+
+            if (prob > topProb) {
+                topProb = prob;
+                topClassName = prediction[i].className + ": " + prob.toFixed(2) + "%";
             }
-            
-            if (topChild) {
-                topChild.innerHTML = topClassName;
-                topChild.style.color = "white";
-            }
+
+            // 레이블 업데이트
+            labelContainer.childNodes[i].innerHTML = "";
         }
+
+        // 가장 높은 확률을 가진 클래스 표시
+        const topChild = labelContainer.childNodes[0]; // 예시로 첫 번째 자식만 사용
+        topChild.innerHTML = topClassName;
+        topChild.style.color = "white";
     }
 
-    async function stop() {
-        flag = false;
+    // 시작 버튼 클릭 시 웹캠 시작
+    document.getElementById('startBtn').addEventListener('click', startWebcam);
+
+    // 중지 버튼 클릭 시 웹캠 중지
+    document.getElementById('stopBtn').addEventListener('click', function() {
         webcam.stop();
-        document.getElementById("webcam-container").removeChild(webcam.canvas);
-        const labels = document.getElementById("label-container");
-        while (labels.firstChild) {
-            labels.removeChild(labels.lastChild);
-        }
-        document.getElementById("startBtn").style.visibility = "visible";
-        document.getElementById("stopBtn").style.visibility = "hidden";
-    }
+        document.getElementById('webcam-container').innerHTML = '';
+        labelContainer.innerHTML = '';
+        document.getElementById('startBtn').style.visibility = "visible";
+        document.getElementById('stopBtn').style.visibility = "hidden";
+    });
 
     window.onload = function () {
-        document.getElementById("stopBtn").style.visibility = "hidden";
+        document.getElementById('stopBtn').style.visibility = "hidden";
     }
 </script>
 </body>
 </html>
+
 
 
 
