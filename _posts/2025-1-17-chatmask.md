@@ -57,7 +57,7 @@ author_profile: false
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
 <script>
-    const URL = "https://imaikim.github.io/my_model/"; // 모델 폴더 경로
+    const URL = "./my_model/"; // 모델 폴더 경로
 
     let model, webcam, labelContainer, maxPredictions;
     let isRunning = false;
