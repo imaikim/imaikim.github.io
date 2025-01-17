@@ -27,18 +27,39 @@ author_profile: false
             background-color: #282c34;
             color: white;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            flex-direction: column;
         }
 
         #container {
+            width: 100%;
+            max-width: 600px;
             display: flex;
             flex-direction: column;
             align-items: center;
+        }
+
+        #button-container {
+            margin: 20px;
+            display: flex;
+            justify-content: space-between;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
+        }
+
+        #startBtn, #stopBtn {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        #stopBtn {
+            background-color: #f44336;
         }
 
         #webcam-container {
@@ -57,44 +78,27 @@ author_profile: false
             background-color: rgba(0, 0, 0, 0.5);
             width: 350px;
             text-align: center;
-        }
-
-        #button-container {
-            display: flex;
-            justify-content: center;
-            margin-top: 20px;
-        }
-
-        #startBtn, #stopBtn {
-            padding: 10px 20px;
-            background-color: #4CAF50;
             color: white;
-            border: none;
-            cursor: pointer;
-            border-radius: 5px;
-            margin: 10px;
         }
 
-        #stopBtn {
-            background-color: #f44336;
+        #label-container div {
+            margin: 5px;
         }
 
         video {
             width: 100%;
             height: auto;
         }
-
-        #label-container div {
-            margin: 5px;
-        }
     </style>
 </head>
 <body>
+
 <div id="container">
     <div id="button-container">
         <button type="button" id="startBtn">시작</button>
         <button type="button" id="stopBtn" style="display: none;">중지</button>
     </div>
+
     <div id="webcam-container"></div>
     <div id="label-container"></div>
 </div>
@@ -103,7 +107,7 @@ author_profile: false
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
 <script>
-    const URL = "https://imaikim.github.io/my_model/";  // 여기에 실제 모델 URL을 입력하세요
+    const URL = "https://your-github-path/my_model/";  // 여기에 실제 모델 URL을 입력하세요
     let model, webcam, labelContainer, maxPredictions;
     let videoElement;  // videoElement 변수로 video 요소를 관리합니다.
 
@@ -209,8 +213,10 @@ author_profile: false
         document.getElementById('stopBtn').style.display = "none";
     }
 </script>
+
 </body>
 </html>
+
 
 
 
