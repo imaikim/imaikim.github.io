@@ -21,33 +21,26 @@ author_profile: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mask Detection</title>
     <style>
-        #container {
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
             height: 100vh;
         }
 
-        #button-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:disabled {
-            background-color: #cccccc;
+        #label-container {
+            position: absolute;
+            top: 20px;
+            font-size: 24px;
+            text-align: center;
+            width: 100%;
+            z-index: 1;
         }
 
         #video-container {
@@ -58,108 +51,125 @@ author_profile: false
             display: none; /* 초기 상태에서 숨김 */
         }
 
-        #label-container {
+        #button-container {
             margin-top: 20px;
-            font-size: 20px;
+            display: flex;
+            gap: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
             color: white;
-            text-align: center;
-            display: none; /* 초기 상태에서 숨김 */
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: #555;
         }
     </style>
 </head>
 <body>
-<div id="container">
+    <div id="label-container">마스크 착용 여부를 확인 중...</div>
+    <div id="video-container">
+        <video id="webcam" autoplay></video>
+    </div>
     <div id="button-container">
         <button id="startBtn">시작</button>
         <button id="stopBtn" disabled>정지</button>
     </div>
-    <div id="video-container">
-        <video id="webcam" autoplay></video>
-    </div>
-    <div id="label-container"></div>
-</div>
 
-<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
-<script>
-    const URL = "https://imaikim.github.io/my_model/";  // 모델 URL
-    let model, webcam, labelContainer, maxPredictions;
+    <script>
+        const URL = "https://imaikim.github.io/my_model/";  // 모델 URL
+        let model, maxPredictions;
 
-    async function loadModel() {
-        const modelURL = URL + "model.json";
-        const metadataURL = URL + "metadata.json";
-        model = await tmImage.load(modelURL, metadataURL);
-        maxPredictions = model.getTotalClasses();
-    }
-
-    async function startWebcam() {
-        const videoElement = document.getElementById('webcam');
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-            videoElement.srcObject = stream;
-            videoElement.style.display = 'block';
-
-            document.getElementById('video-container').style.display = 'block';
-            document.getElementById('label-container').style.display = 'block';
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('stopBtn').disabled = false;
-
-            predictLoop(videoElement);
-        } catch (err) {
-            alert('웹캠 접근이 거부되었습니다. 권한을 확인해주세요.');
-        }
-    }
-
-    async function predictLoop(videoElement) {
-        while (!document.getElementById('stopBtn').disabled) {
-            const prediction = await model.predict(videoElement);
-            let highestProb = 0;
-            let resultText = "";
-
-            prediction.forEach(pred => {
-                if (pred.probability > highestProb) {
-                    highestProb = pred.probability;
-                    resultText = `${pred.className}: ${(highestProb * 100).toFixed(2)}%`;
-                }
-            });
-
-            const label = document.getElementById('label-container');
-            label.innerHTML = resultText;
-
-            await new Promise(resolve => setTimeout(resolve, 100)); // 예측 주기 조정
-        }
-    }
-
-    function stopWebcam() {
-        const videoElement = document.getElementById('webcam');
-        const stream = videoElement.srcObject;
-
-        if (stream) {
-            const tracks = stream.getTracks();
-            tracks.forEach(track => track.stop());
+        // 모델 로드 함수
+        async function loadModel() {
+            const modelURL = URL + "model.json";
+            const metadataURL = URL + "metadata.json";
+            model = await tmImage.load(modelURL, metadataURL);
+            maxPredictions = model.getTotalClasses();
         }
 
-        videoElement.srcObject = null;
-        videoElement.style.display = 'none';
+        // 웹캠 시작 함수
+        async function startWebcam() {
+            const videoElement = document.getElementById('webcam');
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                videoElement.srcObject = stream;
+                videoElement.style.display = 'block';
 
-        document.getElementById('video-container').style.display = 'none';
-        document.getElementById('label-container').style.display = 'none';
-        document.getElementById('label-container').innerHTML = '';
+                document.getElementById('video-container').style.display = 'block';
+                document.getElementById('label-container').style.display = 'block';
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
 
-        document.getElementById('startBtn').disabled = false;
-        document.getElementById('stopBtn').disabled = true;
-    }
+                predictLoop(videoElement);
+            } catch (err) {
+                alert('웹캠 접근이 거부되었습니다. 권한을 확인해주세요.');
+            }
+        }
 
-    document.getElementById('startBtn').addEventListener('click', async () => {
-        if (!model) await loadModel();
-        await startWebcam();
-    });
+        // 실시간 예측 루프
+        async function predictLoop(videoElement) {
+            while (!document.getElementById('stopBtn').disabled) {
+                const prediction = await model.predict(videoElement);
+                let highestProb = 0;
+                let resultText = "";
 
-    document.getElementById('stopBtn').addEventListener('click', stopWebcam);
-</script>
+                prediction.forEach(pred => {
+                    if (pred.probability > highestProb) {
+                        highestProb = pred.probability;
+                        resultText = `${pred.className}: ${(highestProb * 100).toFixed(2)}%`;
+                    }
+                });
+
+                // 결과를 화면 상단에 표시
+                const label = document.getElementById('label-container');
+                label.innerHTML = resultText;
+
+                await new Promise(resolve => setTimeout(resolve, 100)); // 예측 주기 조정
+            }
+        }
+
+        // 웹캠 정지 함수
+        function stopWebcam() {
+            const videoElement = document.getElementById('webcam');
+            const stream = videoElement.srcObject;
+
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+            }
+
+            videoElement.srcObject = null;
+            videoElement.style.display = 'none';
+
+            document.getElementById('video-container').style.display = 'none';
+            document.getElementById('label-container').style.display = 'none';
+            document.getElementById('label-container').innerHTML = "마스크 착용 여부를 확인 중...";
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+        }
+
+        // 버튼 이벤트 핸들러
+        document.getElementById('startBtn').addEventListener('click', async () => {
+            if (!model) await loadModel();
+            await startWebcam();
+        });
+
+        document.getElementById('stopBtn').addEventListener('click', stopWebcam);
+    </script>
 </body>
 </html>
+
+
 
 
 
