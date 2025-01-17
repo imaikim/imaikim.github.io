@@ -15,7 +15,6 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -169,10 +168,12 @@ author_profile: false
 
     window.onload = function () {
         document.getElementById('stopBtn').disabled = true;
+        document.getElementById('label-container').style.visibility = 'hidden'; // 초기 상태에서 텍스트 박스를 숨김
     }
 </script>
 </body>
 </html>
+
 
 
 
