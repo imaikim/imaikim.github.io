@@ -69,7 +69,7 @@ author_profile: false
 </head>
 <body>
 <div id="container">
-    <div id="label-container">마스크 착용 여부를 확인 중...</div>
+    <div id="label-container">마스크 착용 여부</div>
     <div id="video-container">
         <video id="webcam" autoplay></video>
     </div>
@@ -149,7 +149,7 @@ author_profile: false
             videoElement.style.display = 'none';
 
             document.getElementById('video-container').style.display = 'none';
-            document.getElementById('label-container').innerHTML = "마스크 착용 여부를 확인 중...";
+            document.getElementById('label-container').innerHTML = "마스크 착용 여부";
             document.getElementById('startBtn').disabled = false;
             document.getElementById('stopBtn').disabled = true;
         }
