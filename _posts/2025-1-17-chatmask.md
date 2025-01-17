@@ -34,10 +34,11 @@ author_profile: false
             margin: 10px;
             width: 350px;
             height: 350px;
+            background-color: black;
         }
 
         #label-container {
-            margin: 10px;
+            margin: 20px;
             color: white;
             font-size: 20px;
             text-align: center;
@@ -71,7 +72,7 @@ author_profile: false
         <button type="button" id='stopBtn' disabled>중지</button>
     </div>
     <div id="webcam-container"></div>
-    <div id="label-container"></div>
+    <div id="label-container">마스크 인식 결과가 여기에 표시됩니다.</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.1/dist/tf.min.js"></script>
@@ -175,6 +176,7 @@ author_profile: false
 </script>
 </body>
 </html>
+
 
 
 
