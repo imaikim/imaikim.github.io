@@ -53,11 +53,12 @@ author_profile: false
     <div id="label-container"></div>
 </div>
 
+<!-- 올바른 TensorFlow.js 및 Teachable Machine 라이브러리 경로 -->
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
 <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image"></script>
 
 <script type="text/javascript">
-    const URL = "YOUR_MODEL_URL/"; // Replace with the correct model path
+    const URL = "https://teachablemachine.withgoogle.com/models/9P-sLP7Bw/"; // Replace with your Teachable Machine model URL
 
     let model, webcam, labelContainer, maxPredictions;
     let isRunning = false;
@@ -124,3 +125,4 @@ author_profile: false
 </script>
 </body>
 </html>
+
