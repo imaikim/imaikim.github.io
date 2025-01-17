@@ -15,6 +15,7 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,13 +24,14 @@ author_profile: false
     <style>
         body {
             font-family: Arial, sans-serif;
+            background-color: #282c34;
+            color: white;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #282c34;
         }
 
         #container {
@@ -45,9 +47,15 @@ author_profile: false
         #webcam-container {
             width: 100%;
             height: 350px;
-            border: 2px solid #fff;
             margin: 20px 0;
             position: relative;
+            border: 2px solid #fff;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         #button-container {
@@ -74,15 +82,8 @@ author_profile: false
         #label-container {
             background-color: rgba(0, 0, 0, 0.6);
             padding: 10px;
-            color: white;
+            width: 100%;
             font-size: 18px;
-            width: 100%;
-        }
-
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
         }
 
         #stopBtn {
@@ -210,6 +211,8 @@ author_profile: false
 
 </body>
 </html>
+
+
 
 
 
