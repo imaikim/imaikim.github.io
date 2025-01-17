@@ -62,48 +62,59 @@ author_profile: false
     let model, webcam, labelContainer, maxPredictions;
     let isRunning = false;
 
-    // 웹캠과 모델 초기화
     async function init() {
-        try {
-            if (isRunning) {
-                console.log("이미 실행 중입니다.");
-                return;
-            }
-
-            isRunning = true;
-            document.getElementById('startBtn').style.display = 'none';
-            document.getElementById('stopBtn').style.display = 'inline';
-
-            console.log("모델 및 메타데이터 로드 중...");
-            const modelURL = `${URL}model.json`;
-            const metadataURL = `${URL}metadata.json`;
-            model = await tmImage.load(modelURL, metadataURL);
-            maxPredictions = model.getTotalClasses();
-            console.log("모델 로드 완료!");
-
-            console.log("웹캠 설정 중...");
-            webcam = new tmImage.Webcam(350, 350, true); // width, height, flip
-            await webcam.setup(); // 웹캠 권한 요청
-            await webcam.play();
-            console.log("웹캠 설정 완료!");
-
-            document.getElementById("webcam-container").appendChild(webcam.canvas);
-
-            labelContainer = document.getElementById("label-container");
-            labelContainer.innerHTML = '';
-            for (let i = 0; i < maxPredictions; i++) {
-                const labelElement = document.createElement("div");
-                labelContainer.appendChild(labelElement);
-            }
-
-            console.log("애플리케이션 실행 중...");
-            window.requestAnimationFrame(loop);
-        } catch (error) {
-            console.error("애플리케이션 초기화 중 오류 발생:", error);
-            alert("초기화에 실패했습니다. 브라우저 콘솔을 확인하세요.");
-            stop();
+    try {
+        if (isRunning) {
+            console.log("이미 실행 중입니다.");
+            return;
         }
+
+        isRunning = true;
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('stopBtn').style.display = 'inline';
+
+        console.log("모델 및 메타데이터 로드 중...");
+        const modelURL = `${URL}model.json`;
+        const metadataURL = `${URL}metadata.json`;
+        model = await tmImage.load(modelURL, metadataURL);
+        maxPredictions = model.getTotalClasses();
+        console.log("모델 로드 완료!");
+
+        console.log("웹캠 설정 중...");
+        webcam = new tmImage.Webcam(350, 350, true); // width, height, flip
+
+        // 웹캠 설정을 try-catch로 감싸서 오류를 콘솔에 출력
+        try {
+            await webcam.setup(); // 웹캠 권한 요청
+            console.log("웹캠 권한 허용됨");
+        } catch (error) {
+            console.error("웹캠 설정 오류:", error);
+            alert("웹캠 권한을 허용할 수 없습니다. 브라우저에서 권한을 확인하세요.");
+            stop();
+            return;
+        }
+
+        await webcam.play();
+        console.log("웹캠 실행 중");
+
+        document.getElementById("webcam-container").appendChild(webcam.canvas);
+
+        labelContainer = document.getElementById("label-container");
+        labelContainer.innerHTML = '';
+        for (let i = 0; i < maxPredictions; i++) {
+            const labelElement = document.createElement("div");
+            labelContainer.appendChild(labelElement);
+        }
+
+        console.log("애플리케이션 실행 중...");
+        window.requestAnimationFrame(loop);
+    } catch (error) {
+        console.error("초기화 오류:", error);
+        alert("웹캠 초기화에 실패했습니다. 브라우저 콘솔을 확인하세요.");
+        stop();
     }
+}
+
 
     async function loop() {
         if (!isRunning) return;
