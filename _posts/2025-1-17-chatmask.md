@@ -52,7 +52,7 @@ author_profile: false
         #video-container {
             margin-top: 300px;
             width: 350px;
-            height: 350px;
+            height: auto;
             background-color: black;
             display: none; /* 초기 상태에서 숨김 */
         }
@@ -84,7 +84,7 @@ author_profile: false
     </style>
 </head>
 <body>
-    <div id="header">마스크 착용 감지 시스템</div>
+    
     <div id="label-container">마스크 착용 여부를 확인 중...</div>
     <div id="video-container">
         <video id="webcam" autoplay></video>
