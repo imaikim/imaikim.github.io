@@ -15,7 +15,6 @@ author_profile: false
 
 
 <!-- <!DOCTYPE html> -->
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -36,6 +35,7 @@ author_profile: false
             width: 350px;
             height: 350px;
             background-color: black;
+            position: relative;
         }
 
         #label-container {
@@ -65,6 +65,16 @@ author_profile: false
         button:disabled {
             background-color: #ccc;
         }
+
+        .orange-box {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background-color: orange;
+        }
+
     </style>
 </head>
 <body>
@@ -73,7 +83,9 @@ author_profile: false
         <button type="button" id='startBtn'>시작</button>
         <button type="button" id='stopBtn' disabled>중지</button>
     </div>
-    <div id="webcam-container"></div>
+    <div id="webcam-container">
+        <!-- 웹캠 비디오는 이곳에 표시됩니다 -->
+    </div>
     <div id="label-container">마스크 인식 결과가 여기에 표시됩니다.</div>
 </div>
 
@@ -102,6 +114,7 @@ author_profile: false
                 document.getElementById('startBtn').disabled = true;
                 document.getElementById('stopBtn').disabled = false;
                 document.getElementById('label-container').style.visibility = 'visible'; // 텍스트 박스 보이기
+                document.querySelector('.orange-box').style.visibility = 'hidden'; // 오렌지색 박스 숨기기
             })
             .catch(function(error) {
                 console.error('웹캠을 열 수 없습니다.', error);
@@ -153,8 +166,15 @@ author_profile: false
             }
         }
 
-        // 가장 높은 확률을 가진 클래스를 레이블로 표시
+        // 결과를 텍스트로 표시
         document.getElementById("label-container").innerHTML = topClassName;
+
+        // 만약 마스크가 인식되었으면 텍스트 색상 변경
+        if (topClassName.includes("Mask")) {
+            document.getElementById("label-container").style.color = "green";
+        } else {
+            document.getElementById("label-container").style.color = "red";
+        }
     }
 
     // 시작 버튼 클릭 시 웹캠 시작
@@ -165,16 +185,21 @@ author_profile: false
         webcam.stop();
         document.getElementById('webcam-container').innerHTML = '';
         document.getElementById('label-container').innerHTML = '마스크 인식이 중지되었습니다.'; // 텍스트
+        document.querySelector('.orange-box').style.visibility = 'visible'; // 오렌지색 박스 보이기
         document.getElementById('startBtn').disabled = false;
         document.getElementById('stopBtn').disabled = true;
     });
 
     window.onload = function () {
         document.getElementById('stopBtn').disabled = true;
+        const orangeBox = document.createElement('div');
+        orangeBox.classList.add('orange-box');
+        document.getElementById('webcam-container').appendChild(orangeBox);
     }
 </script>
 </body>
 </html>
+
 
 
 
