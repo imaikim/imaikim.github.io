@@ -34,7 +34,7 @@ author_profile: false
         }
 
         #video-container {
-            margin-top: 100px;
+            /*margin-top: 100px;*/
             width: 350px;
             height: auto;
             background-color: black;
