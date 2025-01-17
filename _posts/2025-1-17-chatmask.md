@@ -21,81 +21,52 @@ author_profile: false
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teachable Machine Image</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #282c34;
-            color: white;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
         #container {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            width: 100%;
-            max-width: 500px;
-            text-align: center;
         }
 
         #webcam-container {
-            width: 100%;
-            height: 350px;
-            margin: 20px 0;
             position: relative;
-            border: 2px solid #fff;
+            margin: 10px;
+            width: 350px;
+            height: 350px;
         }
 
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        #label-container {
+            margin: 10px;
+            color: white;
+            text-align: center;
         }
 
         #button-container {
             display: flex;
-            justify-content: space-between;
-            width: 100%;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 10px;
         }
 
-        #startBtn, #stopBtn {
+        button {
             padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: #ff6600;
             border: none;
             border-radius: 5px;
+            color: white;
             cursor: pointer;
-            margin: 10px;
         }
 
-        #stopBtn {
-            background-color: #f44336;
-        }
-
-        #label-container {
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 10px;
-            width: 100%;
-            font-size: 18px;
-        }
-
-        #stopBtn {
-            display: none;
+        button:disabled {
+            background-color: #ccc;
         }
     </style>
 </head>
 <body>
-
 <div id="container">
     <div id="button-container">
-        <button type="button" id="startBtn">시작</button>
-        <button type="button" id="stopBtn">중지</button>
+        <button type="button" id='startBtn'>시작</button>
+        <button type="button" id='stopBtn' disabled>중지</button>
     </div>
     <div id="webcam-container"></div>
     <div id="label-container"></div>
@@ -121,6 +92,10 @@ author_profile: false
 
                 // 모델 로드 및 웹캠 처리
                 loadModelAndStart(videoElement);
+
+                // 버튼 상태 변경
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('stopBtn').disabled = false;
             })
             .catch(function(error) {
                 console.error('웹캠을 열 수 없습니다.', error);
@@ -130,8 +105,6 @@ author_profile: false
 
     // 모델을 로드하고 예측을 시작하는 함수
     async function loadModelAndStart(videoElement) {
-        console.log("모델 로딩 시작...");
-
         // 모델 로드
         const modelURL = URL + "model.json";
         const metadataURL = URL + "metadata.json";
@@ -155,10 +128,6 @@ author_profile: false
 
         // 예측을 시작하는 루프
         window.requestAnimationFrame(loop);
-
-        // 버튼 상태 변경
-        document.getElementById('startBtn').style.display = "none";
-        document.getElementById('stopBtn').style.display = "inline-block";
     }
 
     // 웹캠으로부터 이미지를 업데이트하고 예측을 진행하는 함수
@@ -201,17 +170,17 @@ author_profile: false
         webcam.stop();
         document.getElementById('webcam-container').innerHTML = '';
         labelContainer.innerHTML = '';
-        document.getElementById('startBtn').style.display = "inline-block";
-        document.getElementById('stopBtn').style.display = "none";
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('stopBtn').disabled = true;
     });
 
     window.onload = function () {
-        document.getElementById('stopBtn').style.display = "none";
+        document.getElementById('stopBtn').disabled = true;
     }
 </script>
-
 </body>
 </html>
+
 
 
 
