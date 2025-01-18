@@ -11,7 +11,7 @@ author_profile: false
 
 
 
-### 시작버튼을 클릭하세요
+# 시작버튼을 클릭하세요
 
 
 <!-- <!DOCTYPE html> -->
@@ -20,12 +20,17 @@ author_profile: false
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mask Detection</title>
+    <!--문서의 문자 인코딩을 UTF-8로 설정.
+    화면 뷰포트를 모바일 기기와 데스크톱에서 적절히 표시되도록 설정.
+    문서의 제목을 "Mask Detection"으로 지정.-->
+
     <style>
         #container {
         display: flex;
         flex-direction: column;
         align-items: center;
         }
+        /* #container는 플렉스박스를 사용하여 자식 요소들을 수직 방향으로 정렬하고, 가운데 정렬 */
 
         #label-container {
             margin-top: 20px;
@@ -34,7 +39,7 @@ author_profile: false
         }
 
         #video-container {
-            /*margin-top: 100px;*/
+            /*margin-top: 100px; 조절가능*/
             width: 400px;
             height: auto;
             background-color: black;
@@ -45,12 +50,14 @@ author_profile: false
             width: 100%;
             height: 100%;
         }
+        /* <video> 태그는 #video-container 크기에 맞춰 전체 크기로 확장. */
 
         #button-container {
             margin-top: 20px;
             display: flex;
             gap: 20px;
         }
+        /* 버튼 영역을 플렉스박스로 배치하며, 버튼 간의 간격을 20px로 설정 */
 
         button {
             padding: 10px 20px;
@@ -83,15 +90,18 @@ author_profile: false
     <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8/dist/teachablemachine-image.min.js"></script>
 
     <script>
-        const URL = "https://imaikim.github.io/my_model/";  // 모델 URL
-        let model, maxPredictions;
+        const URL = "https://imaikim.github.io/my_model/";  // 모델 URL 정의
+        let model, maxPredictions; // 변수 초기화
 
         // 모델 로드 함수
         async function loadModel() {
+            // 비동기 함수로 정의. 이 함수는 내부의 비동기 작업(await)을 처리하며 호출 시 Promise를 반환
             const modelURL = URL + "model.json";
-            const metadataURL = URL + "metadata.json";
-            model = await tmImage.load(modelURL, metadataURL);
-            maxPredictions = model.getTotalClasses();
+            // modelURL 변수에 모델 파일(model.json)의 경로를 저장. URL은 외부에서 정의된 기본 경로
+            const metadataURL = URL + "metadata.json"; // metadataURL 변수에 모델 메타데이터 파일(metadata.json)의 경로를 저장
+            model = await tmImage.load(modelURL, metadataURL); // Teachable Machine의 tmImage.load 메서드를 호출하여 모델과 메타데이터를 로드
+            // await를 사용하여 작업 완료 후 결과(로드된 모델 객체)를 model 변수에 저장
+            maxPredictions = model.getTotalClasses(); // 모델의 클래스(예측 가능한 분류) 수를 가져와 maxPredictions 변수에 저장
         }
 
         // 웹캠 시작 함수
